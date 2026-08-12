@@ -27,6 +27,10 @@
     "scraper"
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mirere-ts/4get-sdk.git"
+  },
   "engines": {
     "node": ">=18"
   },
