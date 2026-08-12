@@ -1,6 +1,6 @@
 {
   "name": "4get-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Fully typed TypeScript SDK for the 4get search engine API",
   "type": "module",
   "main": "./dist/index.js",
