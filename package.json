@@ -1,0 +1,37 @@
+{
+  "name": "4get-sdk",
+  "version": "0.1.0",
+  "description": "Fully typed TypeScript SDK for the 4get search engine API",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test test/smoke.test.ts",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "4get",
+    "search",
+    "sdk",
+    "typescript",
+    "scraper"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
