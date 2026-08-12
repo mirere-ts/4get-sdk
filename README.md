@@ -39,7 +39,7 @@ const meta = await client.ami4get(); // instance info, version, instance list
 Instances with bot protection require a `pass` cookie (from solving the captcha):
 
 ```ts
-const client = new FgetClient("https://4get.ca", { pass: "your-token" });
+const client = new FgetClient("https://4get.ca", "your-token");
 ```
 
 ### URL helpers

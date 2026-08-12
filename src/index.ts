@@ -36,9 +36,9 @@ export class FgetClient {
   readonly baseUrl: string;
   readonly pass?: string;
 
-  constructor(baseUrl = "https://4get.ca", options: { pass?: string } = {}) {
+  constructor(baseUrl = "https://4get.ca", pass?: string) {
     this.baseUrl = baseUrl.replace(/\/+$/, "");
-    this.pass = options.pass;
+    this.pass = pass;
   }
 
   private request(path: string, query: QueryParams = {}): Promise<Response> {
@@ -52,11 +52,15 @@ export class FgetClient {
     return fetch(url, { headers });
   }
 
-  private async get<T>(path: string, query: QueryParams = {}): Promise<T> {
+  private async requestJson(path: string, query: QueryParams = {}): Promise<unknown> {
     const res = await this.request(path, query);
     if (res.status === 429) throw new FgetError("Invalid or exhausted pass token (HTTP 429)");
     if (!res.ok) throw new FgetError(`4get request failed: HTTP ${res.status}`);
-    const body = (await res.json()) as T & ApiStatus;
+    return res.json();
+  }
+
+  private async get<T>(path: string, query: QueryParams = {}): Promise<T> {
+    const body = (await this.requestJson(path, query)) as T & ApiStatus;
     if (body.status !== "ok") throw new FgetError(body.status);
     return body;
   }
@@ -93,9 +97,9 @@ export class FgetClient {
 
   /** Search suggestions → `[query, suggestions[]]`. */
   async autocomplete(s: string, scraper?: string): Promise<[string, string[]]> {
-    const res = await this.request("/api/v1/ac", { s, scraper });
-    if (!res.ok) throw new FgetError(`4get request failed: HTTP ${res.status}`);
-    const json = (await res.json()) as { error?: string } | [string, string[]];
+    const json = (await this.requestJson("/api/v1/ac", { s, scraper })) as
+      | { error?: string }
+      | [string, string[]];
     if (!Array.isArray(json)) throw new FgetError(json.error ?? "Invalid autocomplete response");
     return json;
   }
