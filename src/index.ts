@@ -41,7 +41,7 @@ export class FgetClient {
     this.pass = pass;
   }
 
-  private request(path: string, query: QueryParams = {}): Promise<Response> {
+  private async requestJson(path: string, query: QueryParams = {}): Promise<unknown> {
     const url = new URL(path, this.baseUrl);
     for (const [key, value] of Object.entries(query)) {
       if (value === undefined || value === null) continue;
@@ -49,11 +49,7 @@ export class FgetClient {
     }
     const headers: Record<string, string> = { Accept: "application/json" };
     if (this.pass !== undefined) headers.Cookie = `pass=${this.pass}`;
-    return fetch(url, { headers });
-  }
-
-  private async requestJson(path: string, query: QueryParams = {}): Promise<unknown> {
-    const res = await this.request(path, query);
+    const res = await fetch(url, { headers });
     if (res.status === 429) throw new FgetError("Invalid or exhausted pass token (HTTP 429)");
     if (!res.ok) throw new FgetError(`4get request failed: HTTP ${res.status}`);
     return res.json();
